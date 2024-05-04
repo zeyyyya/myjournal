@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import Calendar from "react-calendar";
+import Calendar from "react-calendar"; //npm install react-calendar
 import "react-calendar/dist/Calendar.css";
 
 const CLIENT_ID = "YOUR_SPOTIFY_CLIENT_ID";
