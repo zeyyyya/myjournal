@@ -1,38 +1,86 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+}
+
+.entries {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-top: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+.entry {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  max-width: 300px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+textarea {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.journal-section {
+  width: 60%;
+  margin-left: 20px; /* Adjust as needed */
+}
+
+.calendar-section {
+  width: 30%; /* Adjust as needed */
+}
+
+/* Calendar background and text color */
+.react-calendar {
+  background-color: yellow;
+  color: black;
+}
+
+/* Calendar tile and day text color */
+.react-calendar__tile,
+.react-calendar__month-view__days__day {
+  color: black;
+}
+
+/* Month label */
+.react-calendar__navigation__label {
+  color: black;
+}
+
+/* Navigation buttons */
+.react-calendar__navigation__arrow {
+  background-color: black;
+  color: rgb(7, 3, 3);
+}
+
+/* Navigation buttons on hover */
+.react-calendar__navigation__arrow:hover {
+  background-color: darkgray;
+}
+
+.music-section input[type="text"] {
+  height: 30px;
+  margin-right: 5px;
 }
