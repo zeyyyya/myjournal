@@ -84,3 +84,10 @@ button:disabled {
   height: 30px;
   margin-right: 5px;
 }
+
+.music-container {
+  max-height: 200px; /* Adjust the maximum height as needed */
+  overflow-y: auto; /* Enable vertical scrollbar if needed */
+  border: 1px solid;
+  margin: auto;
+}
