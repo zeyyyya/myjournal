@@ -1,6 +1,19 @@
+/* Add this to your App.css file or wherever you have your styles */
+* {
+  background-color: #fcfbf4;
+}
 .App {
   display: flex;
   justify-content: space-between;
+  color: lightpink;
+}
+
+.journal-section {
+  flex: 30%;
+  padding: 5%;
+  width: 50%;
+  height: 100%;
+  margin-left: 20px;
 }
 
 .entries {
@@ -11,27 +24,56 @@
 }
 
 .entry {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
   margin: 10px;
   max-width: 300px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.entry:hover {
+  transform: translateY(-5px);
+}
+
+.entry p {
+  margin: 0;
+}
+
+.textarea-container {
+  width: 100%;
 }
 
 textarea {
-  width: 80%;
+  width: 100%;
+  resize: none;
+  overflow-wrap: break-word;
   padding: 10px;
   margin-bottom: 10px;
+  border-radius: 5px;
+  border: 4px solid #ddd;
+  transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: darkgrey;
 }
 
 button {
-  margin-top: 10px;
   padding: 10px 20px;
   background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btnSearchSong {
+  margin-left: 10px;
 }
 
 button:hover {
@@ -43,51 +85,39 @@ button:disabled {
   cursor: not-allowed;
 }
 
-.journal-section {
-  width: 60%;
-  margin-left: 20px; /* Adjust as needed */
-}
-
 .calendar-section {
-  width: 30%; /* Adjust as needed */
+  flex: 5%;
+  padding: 1%;
+  width: 30%;
 }
 
-/* Calendar background and text color */
+/* Calendar styling */
 .react-calendar {
-  background-color: yellow;
-  color: black;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Calendar tile and day text color */
 .react-calendar__tile,
 .react-calendar__month-view__days__day {
-  color: black;
+  color: #333;
 }
 
-/* Month label */
 .react-calendar__navigation__label {
-  color: black;
+  color: #333;
 }
 
-/* Navigation buttons */
 .react-calendar__navigation__arrow {
-  background-color: black;
-  color: rgb(7, 3, 3);
+  background-color: #333;
+  color: #fff;
 }
 
-/* Navigation buttons on hover */
 .react-calendar__navigation__arrow:hover {
-  background-color: darkgray;
-}
-
-.music-section input[type="text"] {
-  height: 30px;
-  margin-right: 5px;
+  background-color: #666;
 }
 
 .music-container {
-  max-height: 200px; /* Adjust the maximum height as needed */
-  overflow-y: auto; /* Enable vertical scrollbar if needed */
-  border: 1px solid;
-  margin: auto;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  margin-top: 1%;
 }

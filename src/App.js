@@ -13,6 +13,7 @@ function Search({
   setQuery,
   accessToken,
   addToJournal,
+  addMusicToEntry,
 }) {
   async function search() {
     console.log("Searching for.." + query);
@@ -61,22 +62,27 @@ function Search({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
-      <button type="button" className="btnSearch" onClick={search}>
+      <button type="button" className="btnSearchSong" onClick={search}>
         Search
       </button>
 
       <div className="music-container">
-        {music.map((track) => (
-          <div key={track.id}>
-            <p>{track.name}</p>
-            <p>by {track.artists.map((artist) => artist.name).join(", ")}</p>
-            <button onClick={() => addToJournal(track)}>Add to Journal</button>
-          </div>
-        ))}
+        {music &&
+          music.map((track) => (
+            <div key={track.id}>
+              <p>{track.name}</p>
+              <p>by {track.artists.map((artist) => artist.name).join(", ")}</p>
+              <button onClick={() => addToJournal(track)}>
+                Add to Journal
+              </button>
+            </div>
+          ))}
       </div>
     </>
   );
 }
+//button onclick addMusicToEntry = never adds the music
+//button onclick addToJournal = diretso upload
 
 function App() {
   const [entries, setEntries] = useState([]);
@@ -86,6 +92,7 @@ function App() {
   const [music, setMusic] = useState([]);
   const [query, setQuery] = useState("");
   const [accessToken, setAccessToken] = useState("");
+  const [selectedTracks, setSelectedTracks] = useState([]);
 
   useEffect(() => {
     //copy paste from music app
@@ -132,16 +139,26 @@ function App() {
   };
 
   const editEntry = (index) => {
-    const [dateString, entryText] = entries[index].split(" - ");
-    setCurrentEntry(entryText);
-    setSelectedDate(new Date(dateString));
-    setEditingIndex(index);
+    const confirmation = window.confirm(
+      "Are you sure you want to edit this entry?"
+    );
+    if (confirmation) {
+      const [dateString, entryText] = entries[index].split(" - ");
+      setCurrentEntry(entryText);
+      setSelectedDate(new Date(dateString));
+      setEditingIndex(index);
+    }
   };
 
   const deleteEntry = (index) => {
-    const updatedEntries = [...entries];
-    updatedEntries.splice(index, 1);
-    setEntries(updatedEntries);
+    const confirmation = window.confirm(
+      "Are you sure you want to delete this entry?"
+    );
+    if (confirmation) {
+      const updatedEntries = [...entries];
+      updatedEntries.splice(index, 1);
+      setEntries(updatedEntries);
+    }
   };
 
   const addToJournal = (track) => {
@@ -158,8 +175,38 @@ function App() {
       // If not editing, add a new entry
       setEntries([...entries, entryWithTrack]);
     }
+    setCurrentEntry(""); // Clear current entry after adding to journal
+    setSelectedDate(new Date()); // Reset selected date
+  };
+
+  const addMusicToEntry = (track) => {
+    setSelectedTracks([...selectedTracks, track]);
+  };
+
+  const confirmEntry = () => {
+    // Create an entry with selected tracks
+    const entryWithTracks = `${selectedDate.toDateString()} - ${currentEntry}\n\nTracks:\n${selectedTracks
+      .map(
+        (track) =>
+          `- ${track.name} by ${track.artists
+            .map((artist) => artist.name)
+            .join(", ")}`
+      )
+      .join("\n")}`;
+    if (editingIndex !== null) {
+      // If editing, update the existing entry
+      const updatedEntries = [...entries];
+      updatedEntries[editingIndex] = entryWithTracks;
+      setEntries(updatedEntries);
+      setEditingIndex(null);
+    } else {
+      // If not editing, add a new entry
+      setEntries([...entries, entryWithTracks]);
+    }
+    // Clear current entry and selected tracks
     setCurrentEntry("");
     setSelectedDate(new Date());
+    setSelectedTracks([]);
   };
 
   return (
@@ -167,13 +214,16 @@ function App() {
       <div className="journal-section">
         <h1>My Journal</h1>
         <div className="entry-form">
-          <textarea
-            rows="4"
-            cols="50"
-            value={currentEntry}
-            onChange={handleInputChange}
-            placeholder="Write your entry here..."
-          />
+          <div className="textarea-container">
+            <textarea
+              className="textarea"
+              rows="4"
+              cols="50"
+              value={currentEntry}
+              onChange={handleInputChange}
+              placeholder="Write your entry here..."
+            />
+          </div>
           <br />
           <button onClick={addEntry}>
             {editingIndex !== null ? "Update Entry" : "Add Entry"}
@@ -203,8 +253,24 @@ function App() {
             setQuery={setQuery}
             accessToken={accessToken}
             addToJournal={addToJournal}
+            addMusicToEntry={addMusicToEntry}
           />
-          {/* Render music results here - ewan ko kay gpt pano*/}
+          {/* Display selected music tracks */}
+          {selectedTracks.length > 0 && (
+            <div>
+              <h3>Selected Tracks:</h3>
+              <ul>
+                {selectedTracks.map((track, index) => (
+                  <li key={index}>
+                    {track.name} by{" "}
+                    {track.artists.map((artist) => artist.name).join(", ")}
+                  </li>
+                ))}
+              </ul>
+              {/* Button to confirm entry with selected tracks */}
+              <button onClick={confirmEntry}>Add Entry with Music</button>
+            </div>
+          )}
         </div>
       </div>
     </div>
