@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Calendar from "react-calendar"; //npm install react-calendar
 import "react-calendar/dist/Calendar.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSmile,
+  faFrown,
+  faMeh,
+  faTired,
+} from "@fortawesome/free-solid-svg-icons";
 
 const CLIENT_ID = "9df9c2d5ff4b4c5aac9d6f752e31ec48";
 const CLIENT_SECRET = "67db982056d842b289a0b6a8d92051d2";
@@ -12,8 +19,7 @@ function Search({
   query,
   setQuery,
   accessToken,
-  addToJournal,
-  addMusicToEntry,
+  addMusicToSelectedTracks,
 }) {
   async function search() {
     console.log("Searching for.." + query);
@@ -72,8 +78,8 @@ function Search({
             <div key={track.id}>
               <p>{track.name}</p>
               <p>by {track.artists.map((artist) => artist.name).join(", ")}</p>
-              <button onClick={() => addToJournal(track)}>
-                Add to Journal
+              <button onClick={() => addMusicToSelectedTracks(track)}>
+                Add to Selected Tracks
               </button>
             </div>
           ))}
@@ -93,6 +99,35 @@ function App() {
   const [query, setQuery] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [selectedTracks, setSelectedTracks] = useState([]);
+  const [mood, setMood] = useState("");
+
+  const handleMoodClick = (selectedMood) => {
+    setMood(selectedMood);
+  };
+
+  const addMusicToSelectedTracks = (track) => {
+    setSelectedTracks([...selectedTracks, track]);
+  };
+
+  const SelectedMusic = ({ selectedTracks }) => {
+    return (
+      <div className="selected-music-container">
+        {selectedTracks.length > 0 && (
+          <div>
+            <h3>Selected Tracks:</h3>
+            <ul>
+              {selectedTracks.map((track, index) => (
+                <li key={index}>
+                  {track.name} by{" "}
+                  {track.artists.map((artist) => artist.name).join(", ")}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   useEffect(() => {
     //copy paste from music app
@@ -122,7 +157,26 @@ function App() {
 
   const addEntry = () => {
     if (currentEntry.trim() !== "") {
-      const entryWithDate = `${selectedDate.toDateString()} - ${currentEntry}`;
+      let entryText = currentEntry;
+
+      if (mood !== "") {
+        entryText += `\nMood: ${mood}\n\n`;
+      }
+      // <SelectedMusic selectedTracks={selectedTracks} />;
+
+      if (selectedTracks.length > 0) {
+        entryText += "\nSelected Tracks:\n";
+        selectedTracks.forEach((track) => {
+          entryText += `- ${track.name} by ${track.artists
+            .map((artist) => artist.name)
+            .join(", ")}\n`;
+        });
+
+        entryText += "\n";
+      }
+
+      const entryWithDate = `${selectedDate.toDateString()} - ${entryText}`;
+
       if (editingIndex !== null) {
         // If editing, update the existing entry
         const updatedEntries = [...entries];
@@ -135,6 +189,8 @@ function App() {
       }
       setCurrentEntry("");
       setSelectedDate(new Date());
+      setMood(""); // Clear selected mood
+      setSelectedTracks([]); // Clear selected music tracks
     }
   };
 
@@ -161,6 +217,11 @@ function App() {
     }
   };
 
+  const viewEntry = (index) => {
+    const entryContent = entries[index];
+    alert(entryContent);
+  };
+
   const addToJournal = (track) => {
     const entryWithTrack = `${selectedDate.toDateString()} - ${currentEntry} | Track: ${
       track.name
@@ -183,30 +244,36 @@ function App() {
     setSelectedTracks([...selectedTracks, track]);
   };
 
-  const confirmEntry = () => {
-    // Create an entry with selected tracks
-    const entryWithTracks = `${selectedDate.toDateString()} - ${currentEntry}\n\nTracks:\n${selectedTracks
-      .map(
-        (track) =>
-          `- ${track.name} by ${track.artists
-            .map((artist) => artist.name)
-            .join(", ")}`
-      )
-      .join("\n")}`;
-    if (editingIndex !== null) {
-      // If editing, update the existing entry
-      const updatedEntries = [...entries];
-      updatedEntries[editingIndex] = entryWithTracks;
-      setEntries(updatedEntries);
-      setEditingIndex(null);
-    } else {
-      // If not editing, add a new entry
-      setEntries([...entries, entryWithTracks]);
-    }
-    // Clear current entry and selected tracks
-    setCurrentEntry("");
-    setSelectedDate(new Date());
-    setSelectedTracks([]);
+  const MoodTrack = ({ mood }) => {
+    return (
+      <div className="mood-container">
+        {mood && <p className="selected-mood">Selected Mood: {mood}</p>}
+        <button
+          className={`mood-button ${mood === "happy" ? "selected" : ""}`}
+          onClick={(e) => handleMoodClick("happy", e)}
+        >
+          <FontAwesomeIcon icon={faSmile} size="2x" />
+        </button>
+        <button
+          className={`mood-button ${mood === "sad" ? "selected" : ""}`}
+          onClick={(e) => handleMoodClick("sad", e)}
+        >
+          <FontAwesomeIcon icon={faFrown} size="2x" />
+        </button>
+        <button
+          className={`mood-button ${mood === "neutral" ? "selected" : ""}`}
+          onClick={(e) => handleMoodClick("neutral", e)}
+        >
+          <FontAwesomeIcon icon={faMeh} size="2x" />
+        </button>
+        <button
+          className={`mood-button ${mood === "tired" ? "selected" : ""}`}
+          onClick={(e) => handleMoodClick("tired", e)}
+        >
+          <FontAwesomeIcon icon={faTired} size="2x" />
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -215,6 +282,13 @@ function App() {
         <h1>My Journal</h1>
         <div className="entry-form">
           <div className="textarea-container">
+            {/* Render the MoodTrack component */}
+            <MoodTrack mood={mood} handleMoodClick={handleMoodClick} />
+
+            {/* Render the SelectedMusic component */}
+            <SelectedMusic selectedTracks={selectedTracks} />
+
+            {/* Render the textarea for the entry */}
             <textarea
               className="textarea"
               rows="4"
@@ -234,7 +308,13 @@ function App() {
             <div key={index} className="entry">
               <p>{entry}</p>
               <div>
-                <button onClick={() => editEntry(index)}>Edit</button>
+                <button onClick={() => viewEntry(index)}>View</button>
+                <button
+                  onClick={() => editEntry(index)}
+                  style={{ margin: "2%" }}
+                >
+                  Edit
+                </button>
                 <button onClick={() => deleteEntry(index)}>Delete</button>
               </div>
             </div>
@@ -247,30 +327,16 @@ function App() {
         <div className="music-section">
           <h2>Music</h2>
           <Search
+            className="search-music"
             setMusic={setMusic}
             music={music}
             query={query}
             setQuery={setQuery}
             accessToken={accessToken}
+            addMusicToSelectedTracks={addMusicToSelectedTracks} // Pass the function as a prop
             addToJournal={addToJournal}
             addMusicToEntry={addMusicToEntry}
           />
-          {/* Display selected music tracks */}
-          {selectedTracks.length > 0 && (
-            <div>
-              <h3>Selected Tracks:</h3>
-              <ul>
-                {selectedTracks.map((track, index) => (
-                  <li key={index}>
-                    {track.name} by{" "}
-                    {track.artists.map((artist) => artist.name).join(", ")}
-                  </li>
-                ))}
-              </ul>
-              {/* Button to confirm entry with selected tracks */}
-              <button onClick={confirmEntry}>Add Entry with Music</button>
-            </div>
-          )}
         </div>
       </div>
     </div>

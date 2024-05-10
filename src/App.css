@@ -1,11 +1,11 @@
 /* Add this to your App.css file or wherever you have your styles */
 * {
-  background-color: #fcfbf4;
+  background-color: #e9e0d2;
 }
 .App {
   display: flex;
   justify-content: space-between;
-  color: lightpink;
+  color: #bf6b99;
 }
 
 .journal-section {
@@ -14,24 +14,32 @@
   width: 50%;
   height: 100%;
   margin-left: 20px;
+  margin-top: 5%;
+  border: 2px solid black;
 }
 
 .entries {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(250px, 1fr)
+  ); /* Automatically adjust columns based on available space */
+  grid-gap: 20px; /* Add gap between grid items */
+  justify-content: center; /* Center grid items horizontally */
   margin-top: 20px;
 }
 
 .entry {
   border: 1px solid #ddd;
   border-radius: 10px;
-  padding: 20px;
+  padding: 13px;
   margin: 10px;
   max-width: 300px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  word-wrap: break-word;
+  overflow: hidden;
 }
 
 .entry:hover {
@@ -40,6 +48,11 @@
 
 .entry p {
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit number of lines */
+  -webkit-box-orient: vertical;
 }
 
 .textarea-container {
@@ -53,7 +66,7 @@ textarea {
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
-  border: 4px solid #ddd;
+  border: 1px solid black;
   transition: border-color 0.3s ease;
 }
 
@@ -64,7 +77,7 @@ textarea:focus {
 
 button {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #ab6089;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -77,7 +90,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #d297b7;
 }
 
 button:disabled {
@@ -85,34 +98,67 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.mood-buttons {
+  display: flex;
+}
+
+.mood-button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: #fcfbf4;
+  flex: 1%;
+  margin: 1%;
+}
+
+.mood-button:focus {
+  outline: none;
+}
+
+.mood-button.selected .icon {
+  font-size: 2.5em; /* Adjust the size of the icon */
+}
+
+/* Make the icon transparent only when button is selected */
+.mood-button.selected .icon svg {
+  color: transparent;
+}
 .calendar-section {
   flex: 5%;
   padding: 1%;
-  width: 30%;
+  width: 100%;
+  color: #bf6b99;
 }
 
-/* Calendar styling */
 .react-calendar {
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fcfbf4; /* Match background color */
+  border: 5px solid #ddd; /* Add border */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add shadow */
 }
 
 .react-calendar__tile,
 .react-calendar__month-view__days__day {
-  color: #333;
+  color: #333; /* Darken text color */
+  font-weight: bold; /* Make text bold */
 }
 
 .react-calendar__navigation__label {
-  color: #333;
+  color: #333; /* Darken navigation label color */
+  font-weight: bold; /* Make navigation label bold */
 }
 
 .react-calendar__navigation__arrow {
-  background-color: #333;
-  color: #fff;
+  background-color: #007bff; /* Change arrow background color */
+  color: #bf6b99; /* Arrow text color */
+  border-radius: 50%; /* Round arrow button */
+  padding: 5px; /* Adjust padding */
+  font-size: 20px; /* Increase font size */
 }
 
 .react-calendar__navigation__arrow:hover {
-  background-color: #666;
+  background-color: #bf6b99; /* Darken arrow background color on hover */
 }
 
 .music-container {
