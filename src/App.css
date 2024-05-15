@@ -125,7 +125,7 @@ button:disabled {
   color: transparent;
 }
 .calendar-section {
-  flex: 5%;
+  flex: 1%;
   padding: 1%;
   width: 100%;
   color: #bf6b99;
