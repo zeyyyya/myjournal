@@ -1,45 +1,63 @@
-/* Add this to your App.css file or wherever you have your styles */
-* {
-  background-color: #e9e0d2;
-}
 .App {
   display: flex;
   justify-content: space-between;
   color: #bf6b99;
+  font-family: monospace;
+}
+.journal-section {
+  flex: 5;
+  padding: 5%;
+  width: 60%;
+  height: 100%;
+  margin-left: 70px;
+  margin-top: 110px;
+  margin-right: 10px;
+  background-color: #cc9bb6;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0);
 }
 
-.journal-section {
-  flex: 30%;
-  padding: 5%;
-  width: 50%;
-  height: 100%;
-  margin-left: 20px;
-  margin-top: 5%;
-  border: 2px solid black;
+.journal-section h1 {
+  margin-top: 3px;
 }
 
 .entries {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(250px, 1fr)
-  ); /* Automatically adjust columns based on available space */
-  grid-gap: 20px; /* Add gap between grid items */
-  justify-content: center; /* Center grid items horizontally */
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 85px;
 }
 
 .entry {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 13px;
-  margin: 10px;
-  max-width: 300px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  word-wrap: break-word;
-  overflow: hidden;
+  width: 80%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+}
+
+.entry-row {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.entry-column {
+  flex: 1;
+  width: 15%; /* Adjust the width as needed */
+  padding: 0 10px; /* Add padding to each column */
+}
+
+.entry-actions {
+  display: flex;
+  align-items: center;
+  width: 10%; /* Adjust the width as needed */
+}
+
+.entry-actions button {
+  margin-left: 5px;
 }
 
 .entry:hover {
@@ -66,13 +84,13 @@ textarea {
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
-  border: 1px solid black;
+  border: 1px solid #bf6b99;
   transition: border-color 0.3s ease;
 }
 
 textarea:focus {
   outline: none;
-  border-color: darkgrey;
+  border-color: #bf6b99;
 }
 
 button {
@@ -83,10 +101,6 @@ button {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-
-.btnSearchSong {
-  margin-left: 10px;
 }
 
 button:hover {
@@ -107,7 +121,7 @@ button:disabled {
   background: none;
   padding: 0;
   cursor: pointer;
-  color: #fcfbf4;
+  color: #bf6b99;
   flex: 1%;
   margin: 1%;
 }
@@ -117,53 +131,282 @@ button:disabled {
 }
 
 .mood-button.selected .icon {
-  font-size: 2.5em; /* Adjust the size of the icon */
+  font-size: 2.5em; /* Adjust the size of Fthe icon */
 }
 
 /* Make the icon transparent only when button is selected */
 .mood-button.selected .icon svg {
   color: transparent;
 }
+
+.calendar-music-container {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+}
+/* Add your cute styling here */
 .calendar-section {
+<<<<<<< HEAD
   flex: 1%;
   padding: 1%;
   width: 100%;
   color: #bf6b99;
+=======
+  width: 75%; /* Adjust as needed */
+  margin-top: 70px;
+  padding: 1rem;
+}
+
+h1 {
+  color: #bf6b99; /* Set title color */
+}
+
+.cute-calendar {
+  border: 2px solid #bf6b99; /* Add border around calendar */
+  border-radius: 10px; /* Round the border corners */
+>>>>>>> ae8e743f0c46af7329f4d9c833a4723943f20141
 }
 
 .react-calendar {
-  background-color: #fcfbf4; /* Match background color */
-  border: 5px solid #ddd; /* Add border */
-  border-radius: 10px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add shadow */
+  font-family: "Comic Sans MS", sans-serif; /* Set font family */
 }
 
-.react-calendar__tile,
-.react-calendar__month-view__days__day {
-  color: #333; /* Darken text color */
-  font-weight: bold; /* Make text bold */
+.react-calendar__month-view__days__day,
+.react-calendar__month-view__weekdays__weekday,
+.react-calendar__navigation__label,
+.react-calendar__navigation__prev2-button,
+.react-calendar__navigation__next2-button,
+.react-calendar__navigation__prev-button,
+.react-calendar__navigation__next-button {
+  color: #bf6b99; /* Set day, month, and arrow color */
 }
 
-.react-calendar__navigation__label {
-  color: #333; /* Darken navigation label color */
-  font-weight: bold; /* Make navigation label bold */
+.react-calendar__navigation__prev2-button:enabled:hover,
+.react-calendar__navigation__next2-button:enabled:hover,
+.react-calendar__navigation__prev-button:enabled:hover,
+.react-calendar__navigation__next-button:enabled:hover {
+  background-color: #bf6b99; /* Set navigation button background color on hover */
 }
 
-.react-calendar__navigation__arrow {
-  background-color: #007bff; /* Change arrow background color */
-  color: #bf6b99; /* Arrow text color */
-  border-radius: 50%; /* Round arrow button */
-  padding: 5px; /* Adjust padding */
-  font-size: 20px; /* Increase font size */
+.react-calendar__navigation__prev2-button:enabled:active,
+.react-calendar__navigation__next2-button:enabled:active,
+.react-calendar__navigation__prev-button:enabled:active,
+.react-calendar__navigation__next-button:enabled:active {
+  background-color: #8e3a63; /* Set navigation button background color on click */
 }
 
-.react-calendar__navigation__arrow:hover {
-  background-color: #bf6b99; /* Darken arrow background color on hover */
+.react-calendar__navigation__prev2-button:disabled,
+.react-calendar__navigation__next2-button:disabled,
+.react-calendar__navigation__prev-button:disabled,
+.react-calendar__navigation__next-button:disabled {
+  color: #ccc; /* Set disabled navigation button color */
 }
 
 .music-container {
-  max-height: 200px;
-  overflow-y: auto;
+  display: flex;
+  width: 350px;
+  flex-direction: column; /* Display results vertically */
+  max-height: 500px; /* Limit the height of the results container */
+  overflow-y: auto; /* Add a vertical scrollbar when needed */
+  margin-top: 10px;
+}
+
+.music-section {
+  padding: 1rem; /* Add padding to the section */
+  color: #bf6b99; /* Text color */
+}
+
+.search-container {
+  display: flex;
+  align-items: center; /* Align items vertically */
+}
+
+.search {
+  flex: 1; /* Take up remaining space */
+  height: 40px; /* Adjust height as needed */
+  padding: 0 10px; /* Add padding */
   border: 1px solid #ccc;
-  margin-top: 1%;
+  border-radius: 5px;
+}
+
+.btnSearchSong {
+  height: 40px; /* Adjust height as needed */
+  margin-left: 180px; /* Add margin to separate button from input */
+  margin-top: 5px;
+  background-color: #ab6089;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btnSearchSong:hover {
+  background-color: #d297b7;
+}
+
+.music-section input[type="text"] {
+  height: 20px;
+  width: 80%;
+  margin-right: 5px;
+}
+
+/* Navbar styles */
+.navbar {
+  background-color: #ab6089;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-style: bold;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav-item {
+  margin-left: 20px;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px;
+  transition: 0.3s;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+/* Align rightmost items */
+.nav-item:last-child {
+  margin-left: auto;
+}
+
+/* Style for logout button */
+.logout-button {
+  background-color: #bf6b99;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #d297b7;
+}
+
+/* Login.css */
+
+.body-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.login-form {
+  text-align: center;
+  width: 400px; /* Set the width of the form */
+  height: 400px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form h2 {
+  font-size: 40px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  padding-top: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 75%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-bg {
+  background-color: rgb(165, 107, 191) !important;
+  background-color: linear-gradient(
+    90deg,
+    rgba(165, 107, 191, 1) 0%,
+    rgba(191, 107, 153, 1) 100%
+  ) !important;
+}
+
+.login-button {
+  width: 83%;
+  padding: 10px;
+  background-color: #bf6b99;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+p {
+  margin-top: 20px; /* Adjust the margin-top value as needed */
+}
+
+.register-form {
+  text-align: center;
+  width: 500px; /* Set the width of the form */
+  height: 500px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.register-form h2 {
+  font-size: 40px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  padding-top: 5px;
+}
+
+input.register-input {
+  width: 65%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.register-button {
+  width: 72%;
+  padding: 10px;
+  background-color: #bf6b99;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
