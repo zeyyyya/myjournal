@@ -21,33 +21,56 @@ function JournalForm({
   selectedTracks,
   setSelectedTracks,
   entries,
-  setEntries,
+  handleSaveEntry, // Pass handleSaveEntry from App.js
+  setIsEditing,
 }) {
+  const [selectedFont, setSelectedFont] = useState("monospace");
+
   useEffect(() => {
-    if (!editingIndex) {
+    if (editingIndex !== null) {
+      const entry = entries[editingIndex];
+      setCurrentEntry(entry.text);
+      setSelectedDate(new Date(entry.date));
+      setMood(entry.mood);
+      setSelectedTracks(entry.tracks);
+    } else {
       setSelectedDate(new Date());
     }
-  }, [editingIndex, setSelectedDate]);
+  }, [
+    editingIndex,
+    setCurrentEntry,
+    setSelectedDate,
+    setMood,
+    setSelectedTracks,
+  ]);
 
   const handleMoodClick = (selectedMood) => {
     setMood(selectedMood);
   };
 
-  const addMusicToSelectedTracks = (track) => {
-    setSelectedTracks([...selectedTracks, track]);
-  };
-
-  const SelectedMusic = ({ selectedTracks }) => {
+  const SelectedMusic = ({ selectedTracks, handleRemoveTrack }) => {
     return (
       <div className="selected-music-container">
         {selectedTracks && selectedTracks.length > 0 && (
           <div>
             <h3>Selected Tracks:</h3>
-            <ul>
+            <ul className="track-list">
               {selectedTracks.map((track, index) => (
-                <li key={index}>
-                  {track.name} by{" "}
-                  {track.artists.map((artist) => artist.name).join(", ")}
+                <li key={index} className="track-item journal-track">
+                  <div className="track-info">
+                    <p>
+                      {track.name} by{" "}
+                      {track.artists.map((artist) => artist.name).join(", ")}
+                    </p>
+                  </div>
+                  <div className="remove-button-container">
+                    <button
+                      className="remove-button"
+                      onClick={() => handleRemoveTrack(track.id)}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -57,73 +80,46 @@ function JournalForm({
     );
   };
 
-  const addEntry = () => {
-    if (currentEntry.trim() !== "") {
-      let entryText = currentEntry;
-
-      if (mood !== "") {
-        entryText += `\nMood: ${mood}\n\n`;
-      }
-
-      // Don't include selected tracks in the main entry text
-      // Instead, handle them separately
-      let musicText = "";
-      if (selectedTracks.length > 0) {
-        musicText += "\nSelected Tracks:\n";
-        selectedTracks.forEach((track) => {
-          musicText += `- ${track.name} by ${track.artists
-            .map((artist) => artist.name)
-            .join(", ")}\n`;
-        });
-
-        musicText += "\n";
-      }
-
-      const entryWithDate = `${selectedDate.toDateString()} - ${entryText}`;
-
-      if (editingIndex !== null) {
-        // If editing, update the existing entry
-        const updatedEntries = [...entries];
-        updatedEntries[editingIndex] = entryWithDate + musicText;
-        setEntries(updatedEntries);
-        setEditingIndex(null);
-      } else {
-        // If not editing, add a new entry
-        setEntries([...entries, entryWithDate + musicText]);
-      }
-      setCurrentEntry("");
-      setMood(""); // Clear selected mood
-      setSelectedTracks([]); // Clear selected music tracks
-    }
+  const handleRemoveTrack = (trackId) => {
+    setSelectedTracks(selectedTracks.filter((track) => track.id !== trackId));
   };
 
-  const MoodTrack = ({ mood }) => {
+  const cancelEdit = () => {
+    setIsEditing(false);
+    setCurrentEntry("");
+    setMood("");
+    setSelectedTracks([]);
+    setSelectedDate(new Date());
+    setEditingIndex(null);
+  };
+
+  const MoodTrack = ({ mood, handleMoodClick }) => {
     return (
       <div className="mood-buttons">
         {mood && <p className="selected-mood">Selected Mood: {mood}</p>}
         <button
           className={`mood-button ${mood === "happy" ? "selected" : ""}`}
-          onClick={(e) => handleMoodClick("happy", e)}
+          onClick={() => handleMoodClick("happy")}
         >
-          <FontAwesomeIcon icon={faSmile} size="2x" />
+          <FontAwesomeIcon icon={faSmile} className="icon" size="2x" />
         </button>
         <button
           className={`mood-button ${mood === "sad" ? "selected" : ""}`}
-          onClick={(e) => handleMoodClick("sad", e)}
+          onClick={() => handleMoodClick("sad")}
         >
-          <FontAwesomeIcon icon={faFrown} size="2x" />
+          <FontAwesomeIcon icon={faFrown} className="icon" size="2x" />
         </button>
         <button
           className={`mood-button ${mood === "neutral" ? "selected" : ""}`}
-          onClick={(e) => handleMoodClick("neutral", e)}
+          onClick={() => handleMoodClick("neutral")}
         >
-          <FontAwesomeIcon icon={faMeh} size="2x" />
+          <FontAwesomeIcon icon={faMeh} className="icon" size="2x" />;
         </button>
         <button
           className={`mood-button ${mood === "tired" ? "selected" : ""}`}
-          onClick={(e) => handleMoodClick("tired", e)}
+          onClick={() => handleMoodClick("tired")}
         >
-          <FontAwesomeIcon icon={faTired} size="2x" />
+          <FontAwesomeIcon icon={faTired} className="icon" size="2x" />
         </button>
       </div>
     );
@@ -134,26 +130,39 @@ function JournalForm({
       <h1>My Journal</h1>
       <div className="entry-form">
         <div className="textarea-container">
+          <select
+            value={selectedFont}
+            onChange={(e) => setSelectedFont(e.target.value)}
+          >
+            <option value="monospace">Monospace</option>
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="Times New Roman, serif">Times New Roman</option>
+            <option value="Courier-BoldOblique">Courier</option>
+          </select>
+
           <MoodTrack mood={mood} handleMoodClick={handleMoodClick} />
-
-          {/* Render the SelectedMusic component */}
-          <SelectedMusic selectedTracks={selectedTracks} />
-
-          {/* Render the textarea for the entry */}
+          <SelectedMusic
+            selectedTracks={selectedTracks}
+            handleRemoveTrack={handleRemoveTrack}
+          />
 
           <textarea
             className="textarea"
-            rows="4"
-            cols="50"
+            rows="5"
+            cols="40"
             value={currentEntry}
             onChange={(e) => setCurrentEntry(e.target.value)}
+            style={{ fontFamily: selectedFont }} // Apply selected font style
             placeholder="Write your entry here..."
           />
         </div>
         <br />
-        <button onClick={addEntry}>
-          {editingIndex !== null ? "Update Entry" : "Add Entry"}
-        </button>
+        <div className="saventrybtn">
+          <button style={{ marginInline: "1%" }} onClick={handleSaveEntry}>
+            {editingIndex !== null ? "Update Entry" : "Save Entry"}
+          </button>
+          <button onClick={cancelEdit}>Cancel</button>
+        </div>
       </div>
     </div>
   );

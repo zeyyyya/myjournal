@@ -1,7 +1,12 @@
+import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPlus,
+  faTimes,
+  faPlay,
+  faPause,
+} from "@fortawesome/free-solid-svg-icons";
 import "./App.css";
-
-const CLIENT_ID = "9df9c2d5ff4b4c5aac9d6f752e31ec48";
-const CLIENT_SECRET = "67db982056d842b289a0b6a8d92051d2";
 
 function SearchMusic({
   setMusic,
@@ -9,80 +14,147 @@ function SearchMusic({
   query,
   setQuery,
   accessToken,
-  addMusicToSelectedTracks,
+  selectedTracks,
+  setSelectedTracks,
 }) {
-  async function search() {
-    console.log("Searching for.." + query);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [initialSelectedTracks, setInitialSelectedTracks] = useState([]);
+  const [currentTrackId, setCurrentTrackId] = useState(null); // Track the currently playing track
 
-    try {
-      var trackParameters = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + accessToken,
-        },
-      };
-
-      var response = await fetch(
-        "https://api.spotify.com/v1/search?q=" + query + "&type=track&limit=30",
-        trackParameters
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch tracks");
-      }
-
-      var data = await response.json();
-
-      if (!data || !data.tracks || !data.tracks.items) {
-        throw new Error("Invalid response format");
-      }
-
-      setMusic(data.tracks.items);
-    } catch (error) {
-      console.error("Error searching for music:", error);
+  useEffect(() => {
+    if (setSelectedTracks) {
+      setSelectedTracks(initialSelectedTracks);
     }
-  }
+  }, [initialSelectedTracks, setSelectedTracks]);
+
+  const handleSearchChange = (event) => {
+    setQuery(event.target.value);
+  };
+
+  useEffect(() => {
+    if (!query) return;
+
+    const fetchMusic = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(
+          `https://api.spotify.com/v1/search?q=${encodeURIComponent(
+            query
+          )}&type=track`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const data = await response.json();
+        if (data.tracks && data.tracks.items) {
+          setMusic(data.tracks.items);
+        } else {
+          setMusic([]);
+        }
+      } catch (error) {
+        setError("Failed to fetch music");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMusic();
+  }, [query, accessToken, setMusic]);
+
+  const handleAddTrack = (track) => {
+    if (
+      !selectedTracks.find((selectedTrack) => selectedTrack.id === track.id)
+    ) {
+      setSelectedTracks([...selectedTracks, track]);
+    }
+  };
+
+  const handleRemoveTrack = (trackId) => {
+    setSelectedTracks(selectedTracks.filter((track) => track.id !== trackId));
+  };
+
+  const handlePlayTrack = (trackId) => {
+    setCurrentTrackId(trackId);
+  };
+
+  const handlePauseTrack = () => {
+    setCurrentTrackId(null);
+  };
 
   return (
-    <div className="music-container">
-      <div className="music-section">
-        <h1>Music</h1>
+    <div className="search-music">
+      <div className="fixed-container">
         <input
-          className="search"
           type="text"
-          placeholder="Search Songs.."
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              search();
-            }
-          }}
+          placeholder="Search for music..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleSearchChange} // Use the handleSearchChange function here
         />
-        <button type="button" className="btnSearchSong" onClick={search}>
-          Search
-        </button>
-
-        <div className="music-container">
-          {music &&
-            music.map((track) => (
-              <div key={track.id}>
-                <p>{track.name}</p>
-                <p>
-                  by {track.artists.map((artist) => artist.name).join(", ")}
-                </p>
-                <button onClick={() => addMusicToSelectedTracks(track)}>
-                  Add
-                </button>
+        {loading && <p>Loading...</p>}
+        {error && <p>{error}</p>}
+      </div>
+      <div className="music-container">
+        <ul>
+          {music.map((track) => (
+            <li
+              key={track.id}
+              className={`track-item ${
+                selectedTracks.find(
+                  (selectedTrack) => selectedTrack.id === track.id
+                )
+                  ? "journal-track"
+                  : "searched-track"
+              }`}
+            >
+              <div className="addremovebtn">
+                {selectedTracks.find(
+                  (selectedTrack) => selectedTrack.id === track.id
+                ) ? (
+                  <button onClick={() => handleRemoveTrack(track.id)}>
+                    <FontAwesomeIcon icon={faTimes} />
+                  </button>
+                ) : (
+                  <button onClick={() => handleAddTrack(track)}>
+                    <FontAwesomeIcon icon={faPlus} />
+                  </button>
+                )}
               </div>
-            ))}
-        </div>
+              <div className="track-info">
+                {track.name} by{" "}
+                {track.artists.map((artist) => artist.name).join(", ")}
+              </div>
+              <div className="track-play">
+                {track.preview_url &&
+                  (currentTrackId === track.id ? (
+                    <button className="pausebtn" onClick={handlePauseTrack}>
+                      <FontAwesomeIcon icon={faPause} />
+                    </button>
+                  ) : (
+                    <button
+                      className="playbtn"
+                      onClick={() => handlePlayTrack(track.id)}
+                    >
+                      <FontAwesomeIcon icon={faPlay} />
+                    </button>
+                  ))}
+                {track.preview_url && currentTrackId === track.id && (
+                  <audio
+                    src={track.preview_url}
+                    autoPlay
+                    onEnded={handlePauseTrack}
+                  />
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 }
-//button onclick addMusicToEntry = never adds the music
-//button onclick addToJournal = diretso upload
 
 export default SearchMusic;

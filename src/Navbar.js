@@ -1,4 +1,5 @@
 import React from "react";
+import "./App.css";
 import { Link, useNavigate } from "react-router-dom";
 
 function Navbar({ logout }) {
@@ -14,20 +15,20 @@ function Navbar({ logout }) {
       <ul className="navbar-nav">
         <li className="nav-item">
           <Link to="/" className="nav-link">
-            Home
+            Entries
           </Link>
         </li>
         <li className="nav-item">
           <Link to="/journal" className="nav-link">
-            Journal
+            Journal Your Thoughts
           </Link>
         </li>
-        <li className="nav-item">
-          <button className="logout-button" onClick={handleLogout}>
-            Log Out
-          </button>
-        </li>
       </ul>
+      <div className="logout-container">
+        <button className="logout-button" onClick={handleLogout}>
+          Log Out
+        </button>
+      </div>
     </nav>
   );
 }

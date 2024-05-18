@@ -4,10 +4,9 @@
   color: #bf6b99;
   font-family: monospace;
 }
-
 .journal-section {
-  flex-direction: column;
-  padding: 3%;
+  flex: 5;
+  padding: 5%;
   width: 60%;
   height: 100%;
   margin-left: 70px;
@@ -28,12 +27,6 @@
   align-items: center;
   width: 100%;
   margin-top: 85px;
-  flex: 1%;
-}
-
-.entries h1 {
-  font-family: sans-serif;
-  letter-spacing: 7px;
 }
 
 .entry {
@@ -67,10 +60,9 @@
   margin-left: 5px;
 }
 
-/* Commented out to avoid layout shift on hover */
-/* .entry:hover {
+.entry:hover {
   transform: translateY(-5px);
-} */
+}
 
 .entry p {
   margin: 0;
@@ -103,8 +95,8 @@ textarea:focus {
 
 button {
   padding: 10px 20px;
-  background-color: #bf6b99;
-  color: #ffffff;
+  background-color: #ab6089;
+  color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -112,7 +104,7 @@ button {
 }
 
 button:hover {
-  background-color: #ab6089;
+  background-color: #d297b7;
 }
 
 button:disabled {
@@ -120,39 +112,26 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* M O O D  B U T T O N S*/
-
 .mood-buttons {
   display: flex;
-  align-items: center;
 }
 
 .mood-button {
   border: none;
   background: none;
-  padding: 10px;
+  padding: 0;
   cursor: pointer;
-  color: #bf6b99; /* Default icon color */
+  color: #bf6b99;
+  flex: 1%;
   margin: 1%;
-  transition: color 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.mood-button:hover {
-  color: #d297b7; /* Color on hover */
+.mood-button:focus {
+  outline: none;
 }
 
 .mood-button.selected .icon {
-  font-size: 2.5em; /* Adjust the size of the icon */
-  color: #ff9900;
-}
-
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+  font-size: 2.5em; /* Adjust the size of Fthe icon */
 }
 
 /* Make the icon transparent only when button is selected */
@@ -160,68 +139,37 @@ button:disabled {
   color: transparent;
 }
 
-.selected-mood {
-  color: #bf6b99;
-  font-size: 18px;
-  margin-right: 10px;
-}
-
-.mood-button,
-.mood-button .icon {
-  transition: color 0.3s ease; /* Ensure smooth color transition */
-}
-
-.track-item {
+.calendar-music-container {
   display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  justify-content: space-between;
-  padding: 10px;
-  border-radius: 5px;
+  flex-direction: column; /* Stack items vertically */
+}
+/* Add your cute styling here */
+.calendar-section {
+<<<<<<< HEAD
+  flex: 1%;
+  padding: 1%;
+  width: 100%;
+  color: #bf6b99;
+=======
+  width: 75%; /* Adjust as needed */
+  margin-top: 70px;
+  padding: 1rem;
 }
 
-.track-play .pausebtn {
-  background: transparent;
-}
-
-.track-play .playbtn {
-  background: transparent;
-}
-
-/* Color for searched tracks */
-.searched-track {
-  background-color: #879cb8;
-  color: white;
-}
-
-/* Color for journal tracks */
-.journal-track {
-  background-color: #b5c5d9;
-  color: black;
-}
-
-.track-info {
-  flex: 1;
-}
-
-.remove-button-container {
-  margin-left: 5px;
-}
-
-.calendar-container {
-  width: 400px; /* Set width as needed */
-  margin: 3%;
-  margin-top: 100px; /* Add margin bottom for spacing */
-  margin-bottom: 50px;
-}
-
-.calendar-container h1 {
+h1 {
   color: #bf6b99; /* Set title color */
+}
+
+.cute-calendar {
+  border: 2px solid #bf6b99; /* Add border around calendar */
+  border-radius: 10px; /* Round the border corners */
+>>>>>>> ae8e743f0c46af7329f4d9c833a4723943f20141
 }
 
 .react-calendar {
   font-family: "Comic Sans MS", sans-serif; /* Set font family */
 }
+
 .react-calendar__month-view__days__day,
 .react-calendar__month-view__weekdays__weekday,
 .react-calendar__navigation__label,
@@ -249,48 +197,17 @@ button:disabled {
 .react-calendar__navigation__prev2-button:disabled,
 .react-calendar__navigation__next2-button:disabled,
 .react-calendar__navigation__prev-button:disabled,
-.react-calendar__next-button:disabled {
+.react-calendar__navigation__next-button:disabled {
   color: #ccc; /* Set disabled navigation button color */
 }
 
 .music-container {
-  list-style-type: none;
   display: flex;
-  align-items: center;
-  width: 400px;
+  width: 350px;
   flex-direction: column; /* Display results vertically */
-  max-height: 200px; /* Limit the height of the results container */
-  overflow-y: scroll; /* Ensure consistent scrollbar */
+  max-height: 500px; /* Limit the height of the results container */
+  overflow-y: auto; /* Add a vertical scrollbar when needed */
   margin-top: 10px;
-  margin-left: -20px;
-}
-
-.music-container li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.music-container ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.addremovebtn {
-  border: none;
-  margin-right: 10px;
-}
-
-.addremovebtn button {
-  color: white;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.addremovebtn button:hover {
-  color: #d297b7; /* Hover color */
 }
 
 .music-section {
@@ -299,14 +216,8 @@ button:disabled {
 }
 
 .search-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #fff;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Ensure it appears above other content */
+  display: flex;
+  align-items: center; /* Align items vertically */
 }
 
 .search {
@@ -336,7 +247,7 @@ button:disabled {
 .music-section input[type="text"] {
   height: 20px;
   width: 80%;
-  margin-left: 10px;
+  margin-right: 5px;
 }
 
 /* Navbar styles */
@@ -352,26 +263,24 @@ button:disabled {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 19px;
+  font-size: 18px;
   font-style: bold;
 }
 
-/* Home and Journal */
 .navbar-nav {
-  list-style-type: none;
   display: flex;
   align-items: center;
 }
 
 .nav-item {
-  margin-left: 50px;
+  margin-left: 20px;
 }
 
 .nav-link {
   color: #fff;
   text-decoration: none;
   padding: 10px;
-  transition: 0.5s;
+  transition: 0.3s;
 }
 
 .nav-link:hover {
@@ -381,24 +290,18 @@ button:disabled {
 
 /* Align rightmost items */
 .nav-item:last-child {
-  /* margin-left: auto; */
-}
-
-.logout-container {
-  margin-right: 50px;
+  margin-left: auto;
 }
 
 /* Style for logout button */
 .logout-button {
   background-color: #bf6b99;
-  font-size: 18px;
   color: #fff;
   border: none;
   border-radius: 5px;
   padding: 8px 15px;
   cursor: pointer;
   transition: background-color 0.3s;
-  float: right;
 }
 
 .logout-button:hover {
