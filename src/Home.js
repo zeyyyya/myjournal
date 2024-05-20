@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 
-function Home({ entries, deleteEntry, editEntry, selectedDate, setEntries }) {
+function Home({ entries, deleteEntry, editEntry }) {
   const [editIndex, setEditIndex] = useState(null);
   const [editedEntry, setEditedEntry] = useState("");
   const [editedMood, setEditedMood] = useState("");
   const [editedTracks, setEditedTracks] = useState([]);
+  const [filterType, setFilterType] = useState("");
+  const [filteredEntries, setFilteredEntries] = useState(entries);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setFilteredEntries(entries);
+  }, [entries]);
 
   const handleEditClick = (index) => {
     const entry = entries[index];
@@ -15,7 +21,7 @@ function Home({ entries, deleteEntry, editEntry, selectedDate, setEntries }) {
     setEditedEntry(entry.text);
     setEditedMood(entry.mood);
     setEditedTracks(entry.tracks);
-    navigate(`/journal?index=${index}`); // Navigate to JournalForm.js with the index parameter
+    navigate(`/journal?index=${index}`);
   };
 
   const saveEditedEntry = (index) => {
@@ -25,12 +31,11 @@ function Home({ entries, deleteEntry, editEntry, selectedDate, setEntries }) {
       mood: editedMood,
       tracks: editedTracks,
     };
-    editEntry(index, updatedEntry); // Call the editEntry function to update the entry
+    editEntry(index, updatedEntry);
     setEditIndex(null);
     setEditedEntry("");
     setEditedMood("");
     setEditedTracks([]);
-    setEntries([...entries]); // Update the entries array
   };
 
   const cancelEdit = () => {
@@ -40,9 +45,53 @@ function Home({ entries, deleteEntry, editEntry, selectedDate, setEntries }) {
     setEditedTracks([]);
   };
 
+  const handleFilterChange = (e) => {
+    const selectedFilter = e.target.value;
+    setFilterType(selectedFilter);
+    let updatedEntries = [...entries];
+
+    if (selectedFilter === "date-asc") {
+      updatedEntries.sort((a, b) => new Date(a.date) - new Date(b.date));
+    } else if (selectedFilter === "date-desc") {
+      updatedEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+    } else if (selectedFilter.startsWith("mood:")) {
+      const mood = selectedFilter.split(":")[1];
+      updatedEntries = entries.filter(
+        (entry) => entry.mood.toLowerCase() === mood
+      );
+    }
+
+    setFilteredEntries(updatedEntries);
+  };
+
+  const handleShowAll = () => {
+    setFilteredEntries(entries);
+  };
+
+  const handleDeleteEntry = (index) => {
+    deleteEntry(index);
+    const updatedEntries = entries.filter((_, i) => i !== index);
+    setFilteredEntries(updatedEntries);
+  };
+
   return (
     <div className="entries">
       <h1>Journal Entries</h1>
+      <div className="filter-actions">
+        <label>Filter by: </label>
+        <select onChange={handleFilterChange} className="filter-dropdown">
+          <option value="">Select Filter</option>
+          <option value="date-asc">Oldest to Newest</option>
+          <option value="date-desc">Newest to Oldest</option>
+          <option value="mood:happy">Mood: Happy</option>
+          <option value="mood:sad">Mood: Sad</option>
+          <option value="mood:neutral">Mood: Neutral</option>
+          <option value="mood:tired">Mood: Tired</option>
+        </select>
+        <button onClick={handleShowAll} className="show-all-button">
+          Show All
+        </button>
+      </div>
       <div className="entry">
         <div className="entry-row">
           <div className="entry-column">
@@ -61,8 +110,8 @@ function Home({ entries, deleteEntry, editEntry, selectedDate, setEntries }) {
             <strong>Actions</strong>
           </div>
         </div>
-        {Array.isArray(entries) && entries.length > 0 ? (
-          entries.map((entry, index) => (
+        {Array.isArray(filteredEntries) && filteredEntries.length > 0 ? (
+          filteredEntries.map((entry, index) => (
             <div key={index} className="entry-row">
               <div className="entry-column">{entry.date}</div>
               <div className="entry-column">{entry.mood}</div>
@@ -130,7 +179,7 @@ function Home({ entries, deleteEntry, editEntry, selectedDate, setEntries }) {
                 ) : (
                   <button onClick={() => handleEditClick(index)}>Edit</button>
                 )}
-                <button onClick={() => deleteEntry(index)}>Delete</button>
+                <button onClick={() => handleDeleteEntry(index)}>Delete</button>
               </div>
             </div>
           ))

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSmile,
@@ -25,23 +26,33 @@ function JournalForm({
   setIsEditing,
 }) {
   const [selectedFont, setSelectedFont] = useState("monospace");
+  const location = useLocation();
 
   useEffect(() => {
-    if (editingIndex !== null) {
-      const entry = entries[editingIndex];
+    const params = new URLSearchParams(location.search);
+    const index = params.get("index");
+
+    if (index !== null) {
+      const entry = entries[index];
+      setEditingIndex(index);
       setCurrentEntry(entry.text);
       setSelectedDate(new Date(entry.date));
       setMood(entry.mood);
       setSelectedTracks(entry.tracks);
     } else {
-      setSelectedDate(new Date());
+      setCurrentEntry(""); // Reset entry text
+      setMood(""); // Reset mood
+      setSelectedTracks([]); // Reset selected tracks
+      setSelectedDate(new Date()); // Reset selected date
     }
   }, [
-    editingIndex,
+    location,
+    entries,
     setCurrentEntry,
     setSelectedDate,
     setMood,
     setSelectedTracks,
+    setEditingIndex,
   ]);
 
   const handleMoodClick = (selectedMood) => {
@@ -60,7 +71,9 @@ function JournalForm({
                   <div className="track-info">
                     <p>
                       {track.name} by{" "}
-                      {track.artists.map((artist) => artist.name).join(", ")}
+                      {Array.isArray(track.artists)
+                        ? track.artists.map((artist) => artist.name).join(", ")
+                        : track.artists}
                     </p>
                   </div>
                   <div className="remove-button-container">
@@ -130,16 +143,6 @@ function JournalForm({
       <h1>My Journal</h1>
       <div className="entry-form">
         <div className="textarea-container">
-          <select
-            value={selectedFont}
-            onChange={(e) => setSelectedFont(e.target.value)}
-          >
-            <option value="monospace">Monospace</option>
-            <option value="Arial, sans-serif">Arial</option>
-            <option value="Times New Roman, serif">Times New Roman</option>
-            <option value="Courier-BoldOblique">Courier</option>
-          </select>
-
           <MoodTrack mood={mood} handleMoodClick={handleMoodClick} />
           <SelectedMusic
             selectedTracks={selectedTracks}

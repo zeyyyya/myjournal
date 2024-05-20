@@ -20,6 +20,7 @@
 
 .journal-section h1 {
   margin-top: 3px;
+  color: white;
 }
 
 .entries {
@@ -66,11 +67,6 @@
 .entry-actions button {
   margin-left: 5px;
 }
-
-/* Commented out to avoid layout shift on hover */
-/* .entry:hover {
-  transform: translateY(-5px);
-} */
 
 .entry p {
   margin: 0;
@@ -132,7 +128,7 @@ button:disabled {
   background: none;
   padding: 10px;
   cursor: pointer;
-  color: #bf6b99; /* Default icon color */
+  color: #bf6b99;
   margin: 1%;
   transition: color 0.3s;
   display: flex;
@@ -141,12 +137,12 @@ button:disabled {
 }
 
 .mood-button:hover {
-  color: #d297b7; /* Color on hover */
+  color: #d297b7;
 }
 
 .mood-button.selected .icon {
-  font-size: 2.5em; /* Adjust the size of the icon */
-  color: #ff9900;
+  font-size: 2.5em;
+  color: #ffffff;
 }
 
 .button-container {
@@ -155,20 +151,19 @@ button:disabled {
   margin-top: 10px;
 }
 
-/* Make the icon transparent only when button is selected */
 .mood-button.selected .icon svg {
   color: transparent;
 }
 
 .selected-mood {
-  color: #bf6b99;
+  color: white;
   font-size: 18px;
   margin-right: 10px;
 }
 
 .mood-button,
 .mood-button .icon {
-  transition: color 0.3s ease; /* Ensure smooth color transition */
+  transition: color 0.3s ease;
 }
 
 .track-item {
@@ -190,14 +185,14 @@ button:disabled {
 
 /* Color for searched tracks */
 .searched-track {
-  background-color: #879cb8;
+  background-color: #bf6b99;
   color: white;
 }
 
 /* Color for journal tracks */
 .journal-track {
-  background-color: #b5c5d9;
-  color: black;
+  background-color: #bf6b99;
+  color: rgb(255, 255, 255);
 }
 
 .track-info {
@@ -259,7 +254,7 @@ button:disabled {
   align-items: center;
   width: 400px;
   flex-direction: column; /* Display results vertically */
-  max-height: 200px; /* Limit the height of the results container */
+  max-height: 350px; /* Limit the height of the results container */
   overflow-y: scroll; /* Ensure consistent scrollbar */
   margin-top: 10px;
   margin-left: -20px;
@@ -296,6 +291,23 @@ button:disabled {
 .music-section {
   padding: 1rem; /* Add padding to the section */
   color: #bf6b99; /* Text color */
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 80%;
+  margin-top: 20px;
+}
+
+.filter-dropdown {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #bf6b99;
+  background-color: #f9f9f9;
+  color: #bf6b99;
+  margin-right: 10px;
 }
 
 .search-container {

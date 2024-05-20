@@ -66,7 +66,6 @@ function Register({
               </button>
             </div>
           </form>
-          {/* Link to the Login page */}
           <p>
             Already have an account? <Link to="/">Login</Link>
           </p>
